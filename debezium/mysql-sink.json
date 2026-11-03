@@ -1,0 +1,22 @@
+{
+  "name": "mysql-sink-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.jdbc.JdbcSinkConnector",
+    "tasks.max": "1",
+    "topics": "cdc.order_write_db.orders",
+    "connection.url": "jdbc:mysql://read-db:3306/order_read_db?useSSL=false&allowPublicKeyRetrieval=true",
+    "connection.username": "root",
+    "connection.password": "rootpassword",
+    "insert.mode": "upsert",
+    "delete.enabled": "true",
+    "primary.key.mode": "record_key",
+    "primary.key.fields": "id",
+    "schema.evolution": "basic",
+    "transforms": "unwrap,route",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "false",
+    "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.route.regex": ".*orders",
+    "transforms.route.replacement": "orders"
+  }
+}
